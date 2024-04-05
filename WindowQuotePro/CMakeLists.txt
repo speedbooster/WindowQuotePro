@@ -13,7 +13,7 @@ project(WindowQuotePro LANGUAGES CXX)
 set(CMAKE_CXX_STANDARD 11)
 # wxWidgets
 set(wxWidgets_ROOT_DIR ${wxWidgets_path_base})
-set(wxWidgets_LIB_DIR ${wxWidgets_path_base}/lib/vc_x64_dll)
+#set(wxWidgets_LIB_DIR ${wxWidgets_path_base}/lib/vc_x64_dll)
 set(wxWidgets_CONFIGURATION msw)
 find_package(wxWidgets REQUIRED)
 include(${wxWidgets_USE_FILE})
@@ -28,7 +28,7 @@ set(SRCS
 include_directories(
 	include
 	res
-	${wxWidgets_path_base}/include
+	${wxWidgets_INCLUDE_DIRS}
 )
 
 add_executable(${PROJECT_NAME} WIN32 ${SRCS})
