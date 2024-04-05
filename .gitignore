@@ -3,3 +3,7 @@ out/
 .vs/
 */bin/
 */obj/
+wx/
+*/*.cbp
+*/*.depend
+*/*.layout
