@@ -50,31 +50,37 @@ QuotesPage::QuotesPage(wxWindow* parent, wxSharedPtr<DataStore> pDataStore, cons
     auto pbtnReset = FindFormElement("btnReset");
     if (pbtnReset)
     {
+        pbtnReset->SetToolTip("Reset search fields");
         Bind(wxEVT_BUTTON, &QuotesPage::Reset, this, wxID_RESET);
     }
     auto pbtnSearch = FindFormElement("btnSearch");
     if (pbtnSearch)
     {
+        pbtnSearch->SetToolTip("Search quotes");
         Bind(wxEVT_BUTTON, &QuotesPage::SearchQuotes, this, wxID_FIND);
     }
     auto pbtnClear = FindFormElement("btnClear");
     if (pbtnClear)
     {
+        pbtnClear->SetToolTip("Clear quotes view");
         Bind(wxEVT_BUTTON, &QuotesPage::Clear, this, wxID_CLEAR);
     }
     auto pbtnAdd = FindFormElement("btnAdd");
     if (pbtnAdd)
     {
+        pbtnAdd->SetToolTip("Add a new quote entry");
         Bind(wxEVT_BUTTON, &QuotesPage::AddQuotes, this, wxID_ADD);
     }
     auto pbtnSave = FindFormElement("btnSave");
     if (pbtnSave)
     {
+        pbtnSave->SetToolTip("Save changes");
         Bind(wxEVT_BUTTON, &QuotesPage::Save, this, wxID_SAVE);
     }
     auto pbtnDelete = FindFormElement("btnDelete");
     if (pbtnDelete)
     {
+        pbtnDelete->SetToolTip("Delete selected quotes");
         Bind(wxEVT_BUTTON, &QuotesPage::Delete, this, wxID_DELETE);
     }
 

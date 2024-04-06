@@ -90,6 +90,7 @@ WindowQuoteProFrame::WindowQuoteProFrame(wxWindow *window, const wxString& title
     // Add Quotes page
     wxBoxSizer* contentsSizer = new wxBoxSizer(wxVERTICAL); // to contain Page InShaaALLAAH
     wxWindow* pQuotesWindow = new QuotesPage(contentsPanel, pDataStore, "Quotes");
+    pQuotesWindow->SetBackgroundColour(wxColor(200, 200, 200));
     contentsSizer->Add(pQuotesWindow, 1, wxEXPAND, 1);
     contentsPanel->SetSizerAndFit(contentsSizer);
 
