@@ -13,6 +13,13 @@ Page::Page(wxWindow* parent, wxSharedPtr<DataStore> pDataStore, const wxString& 
 
     m_pSizer = new wxBoxSizer(wxVERTICAL);
     m_pControlsSizer = new wxFlexGridSizer(0);
+
+    bDebug = m_pDataStore->GetDebugMode();
+    bStageHidden = !(m_pDataStore->GetDebugMode());
+    bMessageHidden = !(m_pDataStore->GetDebugMode());
+    bControlsHidden = !(m_pDataStore->GetDebugMode());
+    bDateHidden = false;
+    bNonHijriDateHidden = false;
 }
 
 wxString Page::GetTitle()
@@ -602,11 +609,12 @@ bool Page::GetRow(const int nRow, Page::sRow& oRow, wxString& strMessage, const 
     return bRet;
 }
 
-bool Page::GetUnsavedRows(std::vector<Page::sRow>& vecRows, wxString& strMessage)
+bool Page::GetUnsavedRows(std::vector<Page::sRow>& vecRows, wxString& strMessage, const bool bStage)
 {
     bool bRet = true;
     vecRows.clear();
     wxString strVal = "";
+    wxString strMsg = "";
     for (int i = (m_pGrid->GetNumberRows() - 1); i >= 0; i--) // reverse to set previous one first
     {
         if ((GetRowStage(i) == Stage_New) ||
@@ -614,35 +622,16 @@ bool Page::GetUnsavedRows(std::vector<Page::sRow>& vecRows, wxString& strMessage
             (GetRowStage(i) == Stage_Error))
         {
             sRow oRow;
-            if (! GetRow(i, oRow, strMessage, true))
+            strMsg = "";
+            if (! GetRow(i, oRow, strMsg, true))
             {
+                if (bStage)
+                {
+                    SetRowStage(i, Stage_Error, strMsg);
+                }
                 bRet = false;
             }
-/*            oRow.nRow = i;
-            oRow.strDBID = m_pGrid->GetCellValue(i, Grid_ID_Col);
-            oRow.strStage = "";
-            oRow.strDateTime = m_pGrid->GetCellValue(i, Grid_DateTime_Col);
-            oRow.strDateTimeNonHijri = m_pGrid->GetCellValue(i, Grid_DateTimeNonHijri_Col);
-            for (auto& it : m_mapCols)
-            {
-                if (it.second.bSave)
-                {
-                    strVal = GetCellValue(i, it.first);
-                    if (strVal == "") {
-                        strVal = it.second.strDefault;
-                    }
-                    if ((strVal == "") && (! (it.second.bNullable))) // Error
-                    {
-                        strMessage.Append(Concat({"(Row: ", StrOInt(i), ", Col: \"", it.second.strName, "\"): ",
-                                                  "Field must not be empty.\n"}));
-                        bRet = false;
-                    } else {
-                        oRow.mapData[it.second.strName] = strVal;
-                    }
-                }
-            }
-            oRow.strNewDateTime = "";
-            oRow.strNewDateTimeNonHijri = "";*/
+            strMessage.Append(strMsg);
             vecRows.push_back(oRow);
         }
     }
@@ -659,7 +648,7 @@ void Page::Save(wxCommandEvent& oEvent)
     //std::vector<sRow> vecRows = GetUnsavedRows();
     wxString strMessage = "";
     std::vector<sRow> vecRows;
-    if (! GetUnsavedRows(vecRows, strMessage)) {
+    if (! GetUnsavedRows(vecRows, strMessage, true)) {
         strMessage.Prepend("One or more rows have errors. Data not saved:\n\n");
         wxMessageBox(strMessage, "Error saving data", Msg_Error);
         return;

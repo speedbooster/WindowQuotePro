@@ -29,7 +29,7 @@ QuotesPage::QuotesPage(wxWindow* parent, wxSharedPtr<DataStore> pDataStore, cons
     m_vecColumns.push_back({{Quotes_Grid_Price_Col_Str, "Price", Grid_Amount_Col_Size, true}, {"Price", true, wxDefaultSize, oDefaultSmallFieldSize}});
     m_vecColumns.push_back({{Quotes_Grid_DateTimeGenerated_Col_Str, "Generated", Grid_DateTime_Col_Size, true}, {}});
     m_vecColumns.push_back({{Quotes_Grid_DateTimeUpdated_Col_Str, "Updated", Grid_DateTime_Col_Size, true}, {}});
-    m_vecColumns.push_back({{Quotes_Grid_Status_Col_Str, "Status", Grid_Status_Col_Size, true, bDebug}, {}});
+    m_vecColumns.push_back({{Quotes_Grid_Status_Col_Str, "Status", Grid_Status_Col_Size, true, !bDebug}, {}});
 
 
     m_vecFormElements.push_back({"btnReset", new wxButton(pPage, wxID_RESET, _("Reset"), wxDefaultPosition, oDefaultTinyFieldSize), false});

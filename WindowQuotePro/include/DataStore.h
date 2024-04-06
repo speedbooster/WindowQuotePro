@@ -77,13 +77,6 @@ static const int nStageToBeSaved = 6;
 
 const int nDataStartCol = 5;
 
-const bool bDebug = !false;
-const bool bStageHidden = false;
-const bool bMessageHidden = false;
-const bool bControlsHidden = true;
-const bool bDateHidden = false;
-const bool bNonHijriDateHidden = false;
-
 //------------- Grid definitions end -------------//
 
 static const wxString Material_Wood = "Wood";

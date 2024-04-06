@@ -15,7 +15,7 @@ set(CMAKE_CXX_STANDARD 11)
 set(wxWidgets_ROOT_DIR ${wxWidgets_path_base})
 #set(wxWidgets_LIB_DIR ${wxWidgets_path_base}/lib/vc_x64_dll)
 set(wxWidgets_CONFIGURATION msw)
-find_package(wxWidgets REQUIRED)
+find_package(wxWidgets REQUIRED core base webview)
 include(${wxWidgets_USE_FILE})
 
 set(SRCS 
@@ -24,6 +24,8 @@ set(SRCS
 	DataStore.cpp
 	Page.cpp
 	QuotesPage.cpp
+	DialogHelp.cpp
+	DialogAbout.cpp
 #	res/resource.rc
 )
 

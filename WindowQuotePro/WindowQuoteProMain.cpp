@@ -50,6 +50,7 @@ BEGIN_EVENT_TABLE(WindowQuoteProFrame, wxFrame)
     EVT_CLOSE(WindowQuoteProFrame::OnClose)
     EVT_MENU(idMenuQuit, WindowQuoteProFrame::OnQuit)
     EVT_MENU(idMenuAbout, WindowQuoteProFrame::OnAbout)
+    EVT_MENU(idMenuHelp, WindowQuoteProFrame::OnHelp)
 END_EVENT_TABLE()
 
 WindowQuoteProFrame::WindowQuoteProFrame(wxWindow *window, const wxString& title, const wxPoint& oPosition,
@@ -108,7 +109,8 @@ WindowQuoteProFrame::WindowQuoteProFrame(wxWindow *window, const wxString& title
     wxMenu* settingsMenu = new wxMenu(_T(""));
 
     wxMenu* helpMenu = new wxMenu(_T(""));
-    helpMenu->Append(idMenuAbout, _("&About\tF1"), _("Show info about this application"));
+    helpMenu->Append(idMenuHelp, _("&Help\tF1"), _("Application usage documentation"));
+    helpMenu->Append(idMenuAbout, _("&About"), _("Show info about this application"));
     mainMenuBar->Append(helpMenu, _("&Help"));
 
     SetMenuBar(mainMenuBar);
@@ -208,6 +210,16 @@ void WindowQuoteProFrame::OnQuit(wxCommandEvent &event)
 
 void WindowQuoteProFrame::OnAbout(wxCommandEvent& event)
 {
-    wxMessageBox("BISMILLAAHIRRAHMAANIRRAHEEM", "");
+    //wxMessageBox("BISMILLAAHIRRAHMAANIRRAHEEM", "");
+    DialogAbout* pDialogAbout = new DialogAbout(this);
+    pDialogAbout->ShowModal();
+    pDialogAbout->Destroy();
+}
+
+void WindowQuoteProFrame::OnHelp(wxCommandEvent& event)
+{
+    DialogHelp* pDialogHelp = new DialogHelp(this);
+    pDialogHelp->ShowModal();
+    pDialogHelp->Destroy();
 }
 

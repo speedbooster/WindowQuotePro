@@ -21,6 +21,10 @@
 #include <wx/msgdlg.h>
 
 #include "WindowQuoteProApp.h"
+
+#include "DialogHelp.h"
+#include "DialogAbout.h"
+
 #include "QuotesPage.h"
 
 
@@ -34,6 +38,7 @@ class WindowQuoteProFrame: public wxFrame
         enum
         {
             idMenuQuit = 1000,
+            idMenuHelp,
             idMenuAbout,
             idControlSetup,
             idControlDelete
@@ -41,6 +46,7 @@ class WindowQuoteProFrame: public wxFrame
         void OnClose(wxCloseEvent& event);
         void OnQuit(wxCommandEvent& event);
         void OnAbout(wxCommandEvent& event);
+        void OnHelp(wxCommandEvent& event);
         DECLARE_EVENT_TABLE()
 
         wxSharedPtr<DataStore> m_pDataStore;

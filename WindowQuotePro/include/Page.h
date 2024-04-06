@@ -238,7 +238,7 @@ class Page : public wxWindow
         typCols m_mapCols;
 
         bool GetRow(const int nRow, sRow& oRow, wxString& strMessage, const bool bCheck = true);
-        bool GetUnsavedRows(std::vector<sRow>&, wxString& strMessage);
+        bool GetUnsavedRows(std::vector<sRow>&, wxString& strMessage, const bool bStage = false);
         void SetRowValues(const int nRow = 0, const typRowData& mapRowData = typRowData(), const wxString& strStage = Stage_New, const wxString& strMessage = "", const bool bUpdateStage = true, const bool bReset = true);
         void AddAndSetRowValues(const typRowData& mapRowData = typRowData(), const wxString& strStage = Stage_New, const wxString& strMessage = "", const bool bUpdateStage = true, const bool bReset = true);
 
@@ -269,6 +269,13 @@ class Page : public wxWindow
         {
             idGrid = 1000
         };
+    protected:
+        bool bDebug = !false;
+        bool bStageHidden = !false;
+        bool bMessageHidden = !false;
+        bool bControlsHidden = true;
+        bool bDateHidden = false;
+        bool bNonHijriDateHidden = false;
 };
 
 
