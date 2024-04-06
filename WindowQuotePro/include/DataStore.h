@@ -7,6 +7,7 @@
     #include <wx/wx.h>
 #endif
 
+#include "sqlite3.h"
 #include <wx/tokenzr.h>
 //#include <wx/secretstore.h>
 #include <wx/filename.h>
@@ -18,11 +19,91 @@
 
 #include <map>
 
+const wxString strPathParameter = "%LOCAL_PATH%";
+
+static const wxString Config_Application = "[Application]";
+static const wxString Config_Application_Debug = "Debug";
+static const wxString Config_Application_DatabasePath = "DatabasePath";
+
+
+//------------- Database definitions -------------//
+static const wxString Database_Version = "0.1";
+
+static const wxString Database_Table = "Database";
+static const wxString Database_Table_ID_Field = "DBID";
+static const wxString Database_Table_Version_Field = "Version";
+
+static const wxString Quotes_Table = "Quotes";
+static const wxString Quotes_Table_ID_Field = "QID";
+static const wxString Quotes_Table_Name_Field = "Name";
+static const wxString Quotes_Table_Customer_Field = "Customer";
+static const wxString Quotes_Table_Material_Field = "Material";
+static const wxString Quotes_Table_Size_Field = "Size";
+static const wxString Quotes_Table_Price_Field = "Price";
+
+static const wxString Table_Status_Field = "Status";
+static const wxString Table_DateTimeGenerated_Field = "DateTimeGenerated";
+static const wxString Table_DateTimeUpdated_Field = "DateTimeUpdated";
+static const wxString Table_Last_Insert_Value = "last_insert_rowid()";
+//----------- Database definitions end -----------//
+
+
+//--------------- Grid definitions ---------------//
+static const wxColor Color_Selection = wxColor(250, 250, 255, 1);
+static const wxColor Color_New = *wxCYAN;
+static const wxColor Color_Idle = *wxWHITE;
+static const wxColor Color_Modified = wxColor(220, 220, 255, 1);
+static const wxColor Color_Obsolete = wxColor(255, 225, 0, 1);
+static const wxColor Color_Error = wxColor(255, 220, 220, 1);
+static const wxColor Color_Saved = wxColor(200, 225, 200, 1);
+static const wxColor Color_ToBeSaved = wxColor(220, 255, 220, 1);
+static const wxColor Color_Default = *wxLIGHT_GREY;
+
+static const wxString Stage_New = "0-NEW-";
+static const wxString Stage_Idle = "1-IDLE-";
+static const wxString Stage_Modified = "2-MODIFIED-";
+static const wxString Stage_Obsolete = "3-OBSOLETE-";
+static const wxString Stage_Error = "4-ERROR-";
+static const wxString Stage_Saved = "5-SAVED-";
+static const wxString Stage_ToBeSaved = "6-TO-BE-SAVED-";
+
+static const int nStageNew = 0;
+static const int nStageIdle = 1;
+static const int nStageModified = 2;
+static const int nStageObsolete = 3;
+static const int nStageError = 4;
+static const int nStageSaved = 5;
+static const int nStageToBeSaved = 6;
+
+const int nDataStartCol = 5;
 
 const bool bDebug = !false;
-const bool bControlsHidden = false;
+const bool bStageHidden = false;
+const bool bMessageHidden = false;
+const bool bControlsHidden = true;
+const bool bDateHidden = false;
+const bool bNonHijriDateHidden = false;
 
-const wxString strPathParameter = "%LOCAL_PATH%";
+//------------- Grid definitions end -------------//
+
+static const wxString Material_Wood = "Wood";
+static const wxString Material_Metal = "Metal";
+
+static const wxString Size_S = "S";
+static const wxString Size_M = "M";
+static const wxString Size_L = "L";
+
+static const std::vector<wxString> Materials = {
+    Material_Wood,
+    Material_Metal
+};
+
+static const std::vector<wxString> Sizes = {
+    Size_S,
+    Size_M,
+    Size_L
+};
+
 
 static long nToolTipDelay = 300;
 
@@ -37,13 +118,13 @@ static const std::vector<wxString> Exclusion_Values = {
     Combo_All
 };
 
-/*const int nDefaultFieldWidth = 200;
+const int nDefaultFieldWidth = 200;
 const wxSize oDefaultFieldSize = wxSize(200, -1);
 const wxSize oDefaultTinyFieldSize = wxSize(50, -1);
 const wxSize oDefaultSmallFieldSize = wxSize(80, -1);
-*/
-//typedef std::map<wxString, wxString> typDBResult;
-//typedef std::vector<typDBResult> typDBResultSet;
+
+typedef std::map<wxString, wxString> typDBResult;
+typedef std::vector<typDBResult> typDBResultSet;
 
 class DataStore : public wxObject
 {
@@ -52,13 +133,14 @@ class DataStore : public wxObject
         ~DataStore();
 
         ///////
-        //wxString GetFilePath();
-        //void SetFilePath(wxString& strFilePath);
-        //bool SaveData(const wxString& strQuery);
-        //bool LoadData(const wxString& strQuery);
-        //bool ExecuteQuery(const wxString& strQuery, typDBResultSet& vecResult, wxString& strMessage);
-        //bool ExecuteQueryGetStr(const wxString& strQuery, typDBResultSet& vecResult, wxString& strMessage);
-        /*struct sSearchFields {
+        wxString GetFilePath();
+        void SetFilePath(wxString& strFilePath);
+        bool SaveData(const wxString& strQuery);
+        bool LoadData(const wxString& strQuery);
+        bool ExecuteQuery(const wxString& strQuery, typDBResultSet& vecResult, wxString& strMessage);
+        bool ExecuteQueryGetStr(const wxString& strQuery, typDBResultSet& vecResult, wxString& strMessage);
+        wxString GetCurrentDateTimeStr();
+        struct sSearchFields {
             sSearchFields(const wxString& strVal = "", const bool bExact = false, const bool bQuotes = true)
                 : strVal(strVal), bExact(bExact), bQuotes(bQuotes) {}
             wxString strVal = "";
@@ -68,7 +150,7 @@ class DataStore : public wxObject
         // used to fill filter values for search query
         typedef std::map<wxString, sSearchFields> typFilters;
         void PrepareSearchFilters(wxString& strFilters, const typFilters& mapSearchFields);
-        wxString GetSearchQuery(const wxString& strTable, const wxString& strIDField, const typFilters& mapSearchFields);*/
+        wxString GetSearchQuery(const wxString& strTable, const wxString& strIDField, const typFilters& mapSearchFields);
         ///////
 
         wxStandardPaths& GetStandardPaths();
@@ -87,6 +169,15 @@ class DataStore : public wxObject
         };
 
         void AddComboContent(sComboContents& oComboContents, const wxString& strValue = "", const wxString& strID = "", const std::map<wxString, wxString>& mapMisc = {});
+
+        sComboContents m_oMaterials;
+        void UpdateMaterials();
+        sComboContents& GetMaterials();
+
+        sComboContents m_oSizes;
+        void UpdateSizes();
+        sComboContents& GetSizes();
+
         bool CheckValueExclusion(const wxString& strValue);
 
         /////////
@@ -100,9 +191,11 @@ class DataStore : public wxObject
         /////////
 
         bool GetFileContents(const wxString& strFile, wxString& strContents);
+        bool GetDebugMode();
     private:
-        wxString m_strDatabaseFilePath = "database.db";
-        wxString m_strConfigPath = "config.txt";
+        bool m_bDebug = false;
+        wxString m_strDatabaseFilePath = "database1.db";
+        wxString m_strConfigPath = "config.ini";
         std::map<wxString, std::map<wxString, wxString> > m_mapConfig;
 };
 
@@ -130,7 +223,7 @@ static wxString Concat(const wxArrayString& arrStrings, const wxString& strDelim
     return strResult;
 }
 
-/*static int callback(void *NotUsed, int argc, char **argv, char **azColName){
+static int callback(void *NotUsed, int argc, char **argv, char **azColName){
     int i;
     auto& vecResults = (*((typDBResultSet*)(NotUsed)));
     std::map<wxString, wxString> tmp;
@@ -164,7 +257,6 @@ static wxString StringifyResult(typDBResultSet vecResult)
     }
     return strRet;
 }
-*/
 
 static wxString StrOInt(const int nNum)
 {

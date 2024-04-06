@@ -7,6 +7,11 @@ DataStore::DataStore(wxWindow* window)
     wxFileName oFile(GetStandardPaths().GetExecutablePath());
     oFile.SetFullName(m_strDatabaseFilePath);
     m_strDatabaseFilePath = oFile.GetAbsolutePath();
+    LoadConfig();
+    m_strDatabaseFilePath = GetConfigKey(Config_Application, Config_Application_DatabasePath);
+    m_bDebug = IntOStr(GetConfigKey(Config_Application, Config_Application_Debug));
+    UpdateMaterials();
+    UpdateSizes();
 }
 
 wxStandardPaths& DataStore::GetStandardPaths()
@@ -27,12 +32,27 @@ void DataStore::GetConfig(const wxString& strConfig, std::map<wxString, wxString
 
 wxString DataStore::GetConfigKey(const wxString& strConfig, const wxString& strKey)
 {
-	return m_mapConfig[strConfig][strKey];
+    wxString strVal = "";
+    if (m_mapConfig.find(strConfig) != m_mapConfig.end())
+    {
+        if (m_mapConfig[strConfig].find(strKey) != m_mapConfig[strConfig].end())
+        {
+            strVal = m_mapConfig[strConfig][strKey];
+        }
+    }
+	return strVal;
 }
 
 void DataStore::GetConfigKey(const wxString& strConfig, const wxString& strKey, wxString& strVal)
 {
-	strVal = m_mapConfig[strConfig][strKey];
+    strVal = "";
+    if (m_mapConfig.find(strConfig) != m_mapConfig.end())
+    {
+        if (m_mapConfig[strConfig].find(strKey) != m_mapConfig[strConfig].end())
+        {
+            strVal = m_mapConfig[strConfig][strKey];
+        }
+    }
 }
 
 void DataStore::SetConfig(const wxString& strConfig, const std::map<wxString, wxString>& mapConfig)
@@ -48,8 +68,8 @@ void DataStore::SetConfigKey(const wxString& strConfig, const wxString& strKey, 
 void DataStore::LoadConfig()
 {
     if(!wxFileExists(m_strConfigPath)) {
-        wxTextFile file(m_strConfigPath );
-        file.Create();
+        wxMessageBox(Concat({"Configuration file `", m_strConfigPath, "` not found. Using default parameters."}), "Error", Msg_Warn);
+        return;
     }
     wxFileInputStream input(m_strConfigPath);
     wxTextInputStream text(input, wxT("\x09"), wxConvUTF8 );
@@ -88,20 +108,23 @@ void DataStore::LoadConfig()
         strValue = oTokenizer.GetNextToken().Trim().Trim(false);
         m_mapConfig[strSection][strKey] = strValue;
     }
-    // Display loaded configuration:
-    wxString strMessage = "ALHAMDOLILLAAH successfully loaded configuration:\n\n";
-    wxString strConfig = "";
-    for (auto& it : m_mapConfig)
+    if (IntOStr(GetConfigKey(Config_Application, Config_Application_Debug)))
     {
-        strConfig.Append(Concat({it.first, "\n"}));
-    	for (auto& itr : it.second)
-    	{
-    	    strConfig.Append(Concat({"      ", itr.first, " : ", itr.second, "\n"}));
-    	}
-        strConfig.Append("\n");
+        // Display loaded configuration:
+        wxString strMessage = "ALHAMDOLILLAAH successfully loaded configuration:\n\n";
+        wxString strConfig = "";
+        for (auto& it : m_mapConfig)
+        {
+            strConfig.Append(Concat({it.first, "\n"}));
+            for (auto& itr : it.second)
+            {
+                strConfig.Append(Concat({"      ", itr.first, " : ", itr.second, "\n"}));
+            }
+            strConfig.Append("\n");
+        }
+        strMessage.Append(strConfig);
+        wxMessageBox(strMessage);
     }
-    strMessage.Append(strConfig);
-    wxMessageBox(strMessage);
 }
 
 void DataStore::SaveConfig()
@@ -143,7 +166,7 @@ bool DataStore::GetFileContents(const wxString& strFile, wxString& strContents)
     return true;
 }
 
-/*wxString DataStore::GetFilePath()
+wxString DataStore::GetFilePath()
 {
     return m_strDatabaseFilePath;
 }
@@ -261,18 +284,13 @@ wxString DataStore::GetSearchQuery(const wxString& strTable, const wxString& str
     wxString strFilters = "";
     PrepareSearchFilters(strFilters, mapSearchFields);
     wxString strQuery = Concat({"SELECT * FROM ", Page_Table, PrependIfNotEmpty(" WHERE ", strFilters), PrependIfNotEmpty(" ORDER BY ", Page_Table_ID_Field)});
-    if (strTable == Curriculum_Table) {
-            Append(strFilters, Concat({Levels_Table, ".", Levels_Table_ID_Field, " = ", Curriculum_Table, ".", Curriculum_Table_LID_Field, ""}), " AND ");
-            strQuery = Concat({"SELECT ",
-                        Page_Table, ".*, ",
-                        Levels_Table, ".", Levels_Table_ID_Field, ", ",
-                        //Levels_Table, ".", Levels_Table_Year_Field, ", ",
-                        Levels_Table, ".", Levels_Table_Level_Field, "",
-                        " FROM ", Page_Table, ", ", Levels_Table, PrependIfNotEmpty(" WHERE ", strFilters), PrependIfNotEmpty(" ORDER BY ", Page_Table_ID_Field)});
+    if (strTable == Quotes_Table) {
+        strQuery = Concat({"SELECT ",
+                    Page_Table, ".* ",
+                    " FROM ", Page_Table, "", PrependIfNotEmpty(" WHERE ", strFilters), PrependIfNotEmpty(" ORDER BY ", Page_Table_ID_Field)});
     }
     return strQuery;
 }
-*/
 
 void DataStore::AddComboContent(sComboContents& oComboContents, const wxString& strValue, const wxString& strID, const std::map<wxString, wxString>& mapMisc)
 {
@@ -280,6 +298,51 @@ void DataStore::AddComboContent(sComboContents& oComboContents, const wxString& 
     oComboContents.vecValues.push_back({strID, strValue, mapMisc});
 }
 
+bool DataStore::GetDebugMode()
+{
+    return m_bDebug;
+}
+
+wxString DataStore::GetCurrentDateTimeStr()
+{
+    return wxDateTime::Now().Format("%Y/%m/%d %H:%M:%S");
+}
+
+void DataStore::UpdateMaterials()
+{
+    m_oMaterials.vecValues.clear();
+    m_oMaterials.arrValues.Clear();
+    int i = 1;
+    for (auto& it : Materials)
+    {
+        AddComboContent(m_oMaterials, it, StrOInt(i));
+        i = i + 1;
+    }
+}
+
+void DataStore::UpdateSizes()
+{
+    m_oSizes.vecValues.clear();
+    m_oSizes.arrValues.Clear();
+    int i = 1;
+    for (auto& it : Sizes)
+    {
+        AddComboContent(m_oSizes, it, StrOInt(i));
+        i = i + 1;
+    }
+}
+
+DataStore::sComboContents& DataStore::GetMaterials()
+{
+    //UpdateMaterials();  // in case updating from API
+    return m_oMaterials;
+}
+
+DataStore::sComboContents& DataStore::GetSizes()
+{
+    //UpdateSizes();      // in case updating from API
+    return m_oSizes;
+}
 
 DataStore::~DataStore()
 {

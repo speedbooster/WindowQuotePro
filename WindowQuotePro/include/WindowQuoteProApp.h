@@ -14,7 +14,6 @@
 #include <wx/app.h>
 
 #include "DataStore.h"
-//#include "sqlite3.h"
 
 class WindowQuoteProApp : public wxApp
 {

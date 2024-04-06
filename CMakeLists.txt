@@ -16,4 +16,5 @@ set(wxWidgets_path_base "C:/wxWidgets")			# Path to wxWidgets `include` and `lib
 set(CMAKE_BUILD_TYPE Release)
 
 # Include sub-projects.
+add_subdirectory ("extern/sqlite")
 add_subdirectory ("WindowQuotePro")

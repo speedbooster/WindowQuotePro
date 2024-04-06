@@ -64,28 +64,40 @@ WindowQuoteProFrame::WindowQuoteProFrame(wxWindow *window, const wxString& title
 
     m_pDataStore = pDataStore;
 
-    bool bDisplayDebugControls = !bDebug;
+    bool bDisplayDebugControls = m_pDataStore->GetDebugMode();
+
+    wxBoxSizer* mainSizer = new wxBoxSizer(wxVERTICAL); // to contain controlsPanel and contentsPanel InShaaALLAAH
 
     wxPanel* controlsPanel;
     if (bDisplayDebugControls)
     {
         controlsPanel = new wxPanel(this, wxID_ANY, wxPoint(0, 0), wxSize(10, 25));
         controlsPanel->SetBackgroundColour(wxColor(100, 100, 250));
+
+        wxButton* oSetupButton = new wxButton(controlsPanel, idControlSetup, _("Setup"), wxDefaultPosition + wxPoint(0, 0), wxDefaultSize);
+        wxButton* oDeleteButton = new wxButton(controlsPanel, idControlDelete, _("Delete"), wxDefaultPosition + wxPoint(100, 0), wxDefaultSize);
+
+        Bind(wxEVT_BUTTON, &WindowQuoteProFrame::Setup, this, idControlSetup);
+        Bind(wxEVT_BUTTON, &WindowQuoteProFrame::Delete, this, idControlDelete);
+
+        mainSizer->Add(controlsPanel, 0, wxEXPAND | wxTOP | wxRIGHT | wxLEFT, 1);
     }
+
     wxPanel* contentsPanel = new wxPanel(this, wxID_ANY, wxPoint(0, 0), wxSize(10, 100));
     contentsPanel->SetBackgroundColour(wxColor(100, 255, 100));
 
-    wxBoxSizer* mainSizer = new wxBoxSizer(wxVERTICAL);
-    if (bDisplayDebugControls)
-    {
-        mainSizer->Add(controlsPanel, 0, wxEXPAND | wxTOP | wxRIGHT | wxLEFT, 1);
-    }
+    // Add Quotes page
+    wxBoxSizer* contentsSizer = new wxBoxSizer(wxVERTICAL); // to contain Page InShaaALLAAH
+    wxWindow* pQuotesWindow = new QuotesPage(contentsPanel, pDataStore, "Quotes");
+    contentsSizer->Add(pQuotesWindow, 1, wxEXPAND, 1);
+    contentsPanel->SetSizerAndFit(contentsSizer);
 
     mainSizer->Add(contentsPanel, 1, wxEXPAND | wxALL, 1);
 
     this->SetSizerAndFit(mainSizer);
 
-//#if wxUSE_MENUS
+
+
     // create a menu bar
     wxMenuBar* mainMenuBar = new wxMenuBar();
 
@@ -100,26 +112,11 @@ WindowQuoteProFrame::WindowQuoteProFrame(wxWindow *window, const wxString& title
     mainMenuBar->Append(helpMenu, _("&Help"));
 
     SetMenuBar(mainMenuBar);
-//#endif // wxUSE_MENUS
 
-//#if wxUSE_STATUSBAR
     // create a status bar with some information about the used wxWidgets version
     CreateStatusBar(2);
     //SetStatusText(wxbuildinfo(short_f), 0);
     SetStatusText(_("WindowQuotePro"), 1);
-//#endif // wxUSE_STATUSBAR
-
-    if (bDisplayDebugControls)
-    {
-        wxButton* oSetupButton = new wxButton(controlsPanel, idControlSetup, _("Setup"), wxDefaultPosition + wxPoint(100, 0), wxDefaultSize);
-        wxButton* oDeleteButton = new wxButton(controlsPanel, idControlDelete, _("Delete"), wxDefaultPosition + wxPoint(200, 0), wxDefaultSize);
-    }
-
-    if (bDisplayDebugControls)
-    {
-        Bind(wxEVT_BUTTON, &WindowQuoteProFrame::Setup, this, idControlSetup);
-        Bind(wxEVT_BUTTON, &WindowQuoteProFrame::Delete, this, idControlDelete);
-    }
 
     this->SetMinSize(wxSize(500, 400));
 
@@ -128,12 +125,70 @@ WindowQuoteProFrame::WindowQuoteProFrame(wxWindow *window, const wxString& title
 
 void WindowQuoteProFrame::Setup(wxCommandEvent& oEvent)
 {
+    // check if table exists
+    typDBResultSet vecResult;
+    wxString strMessage = "";
+    wxString strErrorMessage = "";
+    std::vector<wxString> vecQueries = {
+            Concat({
+                "CREATE TABLE ", Database_Table, " (",
+                    Database_Table_ID_Field, " INTEGER PRIMARY KEY ASC, ",
+                    Database_Table_Version_Field, " TEXT, ",
+                    Table_Status_Field, " TEXT, ",
+                    Table_DateTimeGenerated_Field, " TEXT, ",
+                    Table_DateTimeUpdated_Field, " TEXT"
+                ");"
+            }),
+            Concat({
+                "CREATE TABLE ", Quotes_Table, " (",
+                    Quotes_Table_ID_Field, " INTEGER PRIMARY KEY ASC, ",
+                    Quotes_Table_Name_Field, " TEXT, ",
+                    Quotes_Table_Customer_Field, " TEXT, ",
+                    Quotes_Table_Material_Field, " TEXT, ",
+                    Quotes_Table_Size_Field, " TEXT, ",
+                    Quotes_Table_Price_Field, " TEXT, ",
+                    Table_Status_Field, " TEXT, ",
+                    Table_DateTimeGenerated_Field, " TEXT, ",
+                    Table_DateTimeUpdated_Field, " TEXT"
+                ");"
+            }),
+            Concat({
+                "INSERT INTO ", Database_Table, " (",
+                    Database_Table_Version_Field,
+                ") VALUES (",
+                    Database_Version,
+                "); SELECT ", Table_Last_Insert_Value, ";"
+            })
+    };
 
+    for (auto& it : vecQueries)
+    {
+        if (!(m_pDataStore->ExecuteQuery(it, vecResult, strMessage)))
+        {
+            strErrorMessage.Append(strMessage);
+        }
+    }
+    if (strErrorMessage.Length() > 0) {
+        wxMessageBox(strErrorMessage);
+    } else {
+        wxMessageBox("ALHAMDOLILLAAH, database setup successful.", "BISMILLAAHIRRAHMAANIRRAHEEM");
+    }
 }
 
 void WindowQuoteProFrame::Delete(wxCommandEvent& oEvent)
 {
-
+    // check if table exists
+    wxString strQuery = Concat({
+        "DROP TABLE ", Database_Table , ";",
+        "DROP TABLE ", Quotes_Table , ";"
+    });
+    typDBResultSet vecResult;
+    wxString strMessage = "";
+    if (!(m_pDataStore->ExecuteQueryGetStr(strQuery, vecResult, strMessage))) {
+        QueryError(strMessage, strQuery);
+    } else {
+        wxMessageBox(Concat({"ALHAMDOLILLAAH, tables dropped successfully.", "\n\n", strMessage}));
+    }
 }
 
 WindowQuoteProFrame::~WindowQuoteProFrame()

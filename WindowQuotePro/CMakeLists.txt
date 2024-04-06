@@ -22,6 +22,8 @@ set(SRCS
 	WindowQuoteProApp.cpp
 	WindowQuoteProMain.cpp
 	DataStore.cpp
+	Page.cpp
+	QuotesPage.cpp
 #	res/resource.rc
 )
 
@@ -29,6 +31,7 @@ include_directories(
 	include
 	res
 	${wxWidgets_INCLUDE_DIRS}
+	../extern/sqlite
 )
 
 add_executable(${PROJECT_NAME} WIN32 ${SRCS})
@@ -39,9 +42,12 @@ endif()
 
 target_link_libraries(${PROJECT_NAME} PRIVATE 
 	${wxWidgets_LIBRARIES}
+	sqlite3
 )
 
 # copy configuration file, launch script and dependencies
 configure_file(res/icon.ico icon.ico COPYONLY)
+configure_file(res/config.ini config.ini COPYONLY)
+configure_file(res/database.db database.db COPYONLY)
 
 # file(COPY lib DESTINATION ${CMAKE_CURRENT_BINARY_DIR})

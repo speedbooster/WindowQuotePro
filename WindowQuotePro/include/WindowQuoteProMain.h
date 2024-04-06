@@ -21,6 +21,7 @@
 #include <wx/msgdlg.h>
 
 #include "WindowQuoteProApp.h"
+#include "QuotesPage.h"
 
 
 class WindowQuoteProFrame: public wxFrame
