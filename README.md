@@ -4,6 +4,8 @@
 
 A Windows OS based CPQ application for generating quotes for window panes. [More information](https://www.MuhammadBilalKhan.com/work/WindowQuotePro)
 
+Password for the demonstration videos `zip` file is: *cpq*
+
 ### Source release
 
 This directory is a `git` repository.
