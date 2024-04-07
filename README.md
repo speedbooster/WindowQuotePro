@@ -52,7 +52,7 @@ C:\
    |- wxwidgets.props
 ```
 
-A copy of the said directory is available [here] (https://www.MuhammadBilalKhan.com/work/WindowQuotePro).
+A copy of the said directory is available [here](https://www.MuhammadBilalKhan.com/work/WindowQuotePro).
 * Open the project in Microsoft Visual Studio 2022 Community Edition. Make sure the build is set to *Release*. Build.
 * The application executable `WindowQuotePro` is built in subdirectory `out`.
 
