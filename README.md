@@ -26,7 +26,7 @@ Tested with:
 
 #### Build instructions
 
-* Install the `wxWidgets` *headers* and *development files* from wxWidgets website. Set the path to the directory in root CMakeLists.txt:
+* Download the `wxWidgets` *headers* and *development files* from wxWidgets website. Set the path to the directory in root CMakeLists.txt:
 
 ```
 set(wxWidgets_path_base "C:/wxWidgets")
@@ -53,10 +53,11 @@ C:\
 ```
 
 A copy of the said directory is available [here](https://www.MuhammadBilalKhan.com/work/WindowQuotePro).
-* Open the project in Microsoft Visual Studio 2022 Community Edition. Make sure the build is set to *Release*. Build.
-* The application executable `WindowQuotePro` is built in subdirectory `out`.
+* Clone this repository and run `git submodule update --init --recursive` inside the repository
+* Open the project in Microsoft Visual Studio 2022 Community Edition. She build to *x64 Release*. Build `(F7)`.
+* The application executable `WindowQuotePro` is built in subdirectory `out` and the release is packaged in a *zip* file.
 
-InShaaALLAAH, the application would run as expected.
+InShaaALLAAH, the application would be built, packaged and run as expected.
 
 ### Source files
 
