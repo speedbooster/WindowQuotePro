@@ -13,7 +13,8 @@ project ("WindowQuotePro")
 
 # Define build parameters
 set(EnableTests ON)
-set(wxWidgets_path_base "C:/wxWidgets")			# Path to wxWidgets `include` and `lib` files
+set(wxWidgets_path_base "C:/wxWidgets")								# Path to wxWidgets `include` and `lib` directories
+set(wxWidgets_path_libs ${wxWidgets_path_base}/lib/vc14x_x64_dll)	# Path to wxWidgets libraries inside the `lib` directory
 set(CMAKE_BUILD_TYPE Release)
 
 

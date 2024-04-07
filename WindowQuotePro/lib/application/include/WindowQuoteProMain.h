@@ -20,8 +20,6 @@
 #include <wx/statbmp.h>
 #include <wx/msgdlg.h>
 
-#include "WindowQuoteProApp.h"
-
 #include "DialogHelp.h"
 #include "DialogAbout.h"
 
