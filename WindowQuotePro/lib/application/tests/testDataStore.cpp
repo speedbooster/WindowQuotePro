@@ -2,9 +2,11 @@
 #include <gtest/gtest.h>
 #include <DataStore.h>
 
-TEST(UIComponentsTestDataStore, TestGrid)
-{
-    wxSharedPtr<DataStore> pDataStore(new DataStore(0L));
+#include <wx/app.h>
 
-    EXPECT_EQ(, 0x05);
+TEST(ApplicationDataStore, TestGrid)
+{
+    wxDisableAsserts();
+    wxSharedPtr<DataStore> pDataStore(new DataStore(0L));
+    ASSERT_EQ(pDataStore->GetMaterials().vecValues.size(), 2);
 }

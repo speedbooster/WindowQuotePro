@@ -17,7 +17,7 @@ set(SRCS
 	src/QuotesPage.cpp
 	src/DialogHelp.cpp
 	src/DialogAbout.cpp
-)
+	res/Resource.rc)
 
 add_library(${PROJECT_NAME} STATIC ${SRCS})
 

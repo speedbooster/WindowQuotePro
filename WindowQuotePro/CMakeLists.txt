@@ -21,13 +21,6 @@ include(${wxWidgets_USE_FILE})
 
 set(SRCS 
 	WindowQuoteProApp.cpp
-#	WindowQuoteProMain.cpp
-#	DataStore.cpp
-#	Page.cpp
-#	QuotesPage.cpp
-#	DialogHelp.cpp
-#	DialogAbout.cpp
-#	res/resource.rc
 )
 
 include_directories(
