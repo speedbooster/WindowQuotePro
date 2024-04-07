@@ -12,9 +12,15 @@ endif()
 project ("WindowQuotePro")
 
 # Define build parameters
+set(EnableTests ON)
 set(wxWidgets_path_base "C:/wxWidgets")			# Path to wxWidgets `include` and `lib` files
 set(CMAKE_BUILD_TYPE Release)
 
+
 # Include sub-projects.
+if (EnableTests)
+	set(gtest_force_shared_crt on)
+	add_subdirectory ("extern/gtest")
+endif()
 add_subdirectory ("extern/sqlite")
 add_subdirectory ("WindowQuotePro")

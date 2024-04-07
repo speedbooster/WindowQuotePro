@@ -53,3 +53,7 @@ configure_file(res/config.ini config.ini COPYONLY)
 configure_file(res/database.db database.db COPYONLY)
 
 # file(COPY lib DESTINATION ${CMAKE_CURRENT_BINARY_DIR})
+
+if (EnableTests)
+    add_subdirectory(tests)
+endif()
