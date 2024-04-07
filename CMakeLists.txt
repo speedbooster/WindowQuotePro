@@ -16,12 +16,16 @@ set(EnableTests ON)
 set(wxWidgets_path_base "C:/wxWidgets")								# Path to wxWidgets `include` and `lib` directories
 set(wxWidgets_path_libs ${wxWidgets_path_base}/lib/vc14x_x64_dll)	# Path to wxWidgets libraries inside the `lib` directory
 set(CMAKE_BUILD_TYPE Release)
+set(ApplicationVersionMajor "0")
+set(ApplicationVersionMinor "1")
+set(ApplicationVersionPatch "2")
+set(ApplicationVersion "${ApplicationVersionMajor}.${ApplicationVersionMinor}.${ApplicationVersionPatch}")
 
 
 # Include sub-projects.
 if (EnableTests)
 	set(gtest_force_shared_crt on)
-	add_subdirectory ("extern/gtest")
+	add_subdirectory ("extern/gtest" EXCLUDE_FROM_ALL)
 endif()
 add_subdirectory ("extern/sqlite")
 add_subdirectory ("WindowQuotePro")

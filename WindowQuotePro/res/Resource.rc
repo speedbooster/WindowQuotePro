@@ -1,3 +1,4 @@
 aaaa ICON "icon.ico"
+iconSplashScreen RCDATA "splashscreen.png"
 
 #include "wx/msw/wx.rc"

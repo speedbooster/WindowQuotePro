@@ -22,7 +22,7 @@ DialogAbout::DialogAbout(wxWindow* window)
         _(
             Concat({
                 "WindowQuotePro (64-bit) ",
-                AppVersion,
+                wxString(AppVersion),
                 "\n"
             })
         ), wxDefaultPosition, wxDefaultSize

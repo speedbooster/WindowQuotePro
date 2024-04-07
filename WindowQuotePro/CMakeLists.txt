@@ -4,7 +4,7 @@
 # project specific logic here.
 #
 
-cmake_minimum_required(VERSION 3.12)
+cmake_minimum_required(VERSION 3.18)
 
 project(WindowQuotePro LANGUAGES CXX)
 
@@ -14,13 +14,13 @@ set(CMAKE_CXX_STANDARD 11)
 
 # wxWidgets
 set(wxWidgets_ROOT_DIR ${wxWidgets_path_base})
-#set(wxWidgets_LIB_DIR ${wxWidgets_path_base}/lib/vc_x64_dll)
 set(wxWidgets_CONFIGURATION msw)
 find_package(wxWidgets REQUIRED core base)
 include(${wxWidgets_USE_FILE})
 
 set(SRCS 
 	WindowQuoteProApp.cpp
+	res/Resource.rc
 )
 
 include_directories(
@@ -44,7 +44,9 @@ target_link_libraries(${PROJECT_NAME} PRIVATE
 )
 
 # copy configuration file, launch script and dependencies
-configure_file(lib/application/res/icon.ico ${CMAKE_CURRENT_BINARY_DIR}/icon.ico COPYONLY)
+# Copy to binary directory for running in IDE
+configure_file(res/icon.ico ${CMAKE_CURRENT_BINARY_DIR}/icon.ico COPYONLY)					# For linux
+configure_file(res/splashscreen.png ${CMAKE_CURRENT_BINARY_DIR}/splashscreen.png COPYONLY)	# For linux
 configure_file(lib/application/res/config.ini ${CMAKE_CURRENT_BINARY_DIR}/config.ini COPYONLY)
 configure_file(lib/application/res/database.db ${CMAKE_CURRENT_BINARY_DIR}/database.db COPYONLY)
 
@@ -52,8 +54,34 @@ configure_file(${wxWidgets_path_libs}/wxbase32u_vc14x_x64.dll ${CMAKE_CURRENT_BI
 configure_file(${wxWidgets_path_libs}/wxmsw32u_core_vc14x_x64.dll ${CMAKE_CURRENT_BINARY_DIR}/wxmsw32u_core_vc14x_x64.dll COPYONLY)
 configure_file(${wxWidgets_path_libs}/wxmsw32u_webview_vc14x_x64.dll ${CMAKE_CURRENT_BINARY_DIR}/wxmsw32u_webview_vc14x_x64.dll COPYONLY)
 
-# file(COPY lib DESTINATION ${CMAKE_CURRENT_BINARY_DIR})
+file(COPY doc/README.txt DESTINATION ${CMAKE_CURRENT_BINARY_DIR})
+file(COPY doc/UserManual.html DESTINATION ${CMAKE_CURRENT_BINARY_DIR})
+
+# Setup `install` for CPack
+install(TARGETS ${PROJECT_NAME} RUNTIME CONFIGURATIONS Release)
+
+install(FILES ${CMAKE_CURRENT_BINARY_DIR}/icon.ico DESTINATION ${CMAKE_INSTALL_BINDIR})
+install(FILES ${CMAKE_CURRENT_BINARY_DIR}/splashscreen.png DESTINATION ${CMAKE_INSTALL_BINDIR})
+install(FILES ${CMAKE_CURRENT_BINARY_DIR}/config.ini DESTINATION ${CMAKE_INSTALL_BINDIR})
+install(FILES ${CMAKE_CURRENT_BINARY_DIR}/database.db DESTINATION ${CMAKE_INSTALL_BINDIR})
+
+install(FILES ${CMAKE_CURRENT_BINARY_DIR}/wxbase32u_vc14x_x64.dll DESTINATION ${CMAKE_INSTALL_BINDIR})
+install(FILES ${CMAKE_CURRENT_BINARY_DIR}/wxmsw32u_core_vc14x_x64.dll DESTINATION ${CMAKE_INSTALL_BINDIR})
+install(FILES ${CMAKE_CURRENT_BINARY_DIR}/wxmsw32u_webview_vc14x_x64.dll DESTINATION ${CMAKE_INSTALL_BINDIR})
+
+install(FILES ${CMAKE_CURRENT_BINARY_DIR}/README.txt TYPE DOC)
+install(FILES ${CMAKE_CURRENT_BINARY_DIR}/UserManual.html TYPE DOC)
+
+set(CPACK_PACKAGE_VERSION_MAJOR ${ApplicationVersionMajor})
+set(CPACK_PACKAGE_VERSION_MINOR ${ApplicationVersionMinor})
+set(CPACK_PACKAGE_VERSION_PATCH ${ApplicationVersionPatch})
+set(CPACK_GENERATOR "ZIP")
+set(CPACK_INCLUDE_TOPLEVEL_DIRECTORY OFF)
+include(CPack)
 
 #if (EnableTests)
 #    add_subdirectory(tests)
 #endif()
+
+# Package
+add_custom_command(TARGET ${PROJECT_NAME} COMMAND "cd ${CMAKE_CURRENT_BINARY_DIR} && cpack")

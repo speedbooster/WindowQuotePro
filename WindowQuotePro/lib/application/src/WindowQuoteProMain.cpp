@@ -57,12 +57,6 @@ WindowQuoteProFrame::WindowQuoteProFrame(wxWindow *window, const wxString& title
                                          const wxSize& oSize, wxSharedPtr<DataStore> pDataStore)
     : wxFrame(window, -1, title, wxDefaultPosition, wxDefaultSize, wxDEFAULT_FRAME_STYLE)
 {
-#if defined(__WXMSW__)
-    SetIcon(wxIcon("aaaa"));
-#else
-    SetIcon(wxIcon("icon.ico"));
-#endif // wxUSE_UNICODE
-
     m_pDataStore = pDataStore;
 
     bool bDisplayDebugControls = m_pDataStore->GetDebugMode();

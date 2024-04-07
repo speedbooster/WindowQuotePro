@@ -17,12 +17,12 @@ set(SRCS
 	src/QuotesPage.cpp
 	src/DialogHelp.cpp
 	src/DialogAbout.cpp
-	res/Resource.rc)
+)
 
 add_library(${PROJECT_NAME} STATIC ${SRCS})
 
 target_compile_definitions(${PROJECT_NAME} PRIVATE
-	AppVersion="0.0.1"
+	AppVersion="${ApplicationVersion}"
 )
 target_include_directories(${PROJECT_NAME} PUBLIC include)
 target_link_libraries(${PROJECT_NAME} PRIVATE 
@@ -31,7 +31,6 @@ target_link_libraries(${PROJECT_NAME} PRIVATE
 )
 
 # copy configuration file, launch script and dependencies
-configure_file(res/icon.ico ${CMAKE_CURRENT_BINARY_DIR}/icon.ico COPYONLY)
 configure_file(res/config.ini ${CMAKE_CURRENT_BINARY_DIR}/config.ini COPYONLY)
 configure_file(res/database.db ${CMAKE_CURRENT_BINARY_DIR}/database.db COPYONLY)
 

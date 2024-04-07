@@ -13,6 +13,8 @@
 
 #include <wx/app.h>
 
+#include <wx/splash.h>
+
 #include "DataStore.h"
 
 class WindowQuoteProApp : public wxApp
