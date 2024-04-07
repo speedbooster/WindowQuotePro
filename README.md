@@ -3,7 +3,7 @@
 ## WindowQuotePro
 
 A Windows OS based CPQ application for generating quotes for window panes. [More information](https://www.MuhammadBilalKhan.com/work/WindowQuotePro)
-s
+
 Password for the demonstration videos `zip` file is: *cpq*
 
 `Note:` Quite exhausted at this stage to add *doxygen* comments.
