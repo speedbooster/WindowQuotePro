@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 3.5)
+cmake_minimum_required(VERSION 3.12)
 
 project(Application LANGUAGES CXX)
 
@@ -21,6 +21,9 @@ set(SRCS
 
 add_library(${PROJECT_NAME} STATIC ${SRCS})
 
+target_compile_definitions(${PROJECT_NAME} PRIVATE
+	AppVersion="0.0.1"
+)
 target_include_directories(${PROJECT_NAME} PUBLIC include)
 target_link_libraries(${PROJECT_NAME} PRIVATE 
 	${wxWidgets_LIBRARIES}

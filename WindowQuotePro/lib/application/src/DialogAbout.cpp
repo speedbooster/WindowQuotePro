@@ -21,7 +21,9 @@ DialogAbout::DialogAbout(wxWindow* window)
     wxStaticText* pAppInfoText = new wxStaticText(pAppInfoTextPanel, wxID_ANY,
         _(
             Concat({
-                "WindowQuotePro (64-bit)\n",
+                "WindowQuotePro (64-bit) ",
+                AppVersion,
+                "\n"
             })
         ), wxDefaultPosition, wxDefaultSize
     );

@@ -81,7 +81,7 @@ QuotesPage::QuotesPage(wxWindow* parent, wxSharedPtr<DataStore> pDataStore, cons
     if (pbtnDelete)
     {
         pbtnDelete->SetToolTip("Delete selected quotes");
-        Bind(wxEVT_BUTTON, &QuotesPage::Delete, this, wxID_DELETE);
+        Bind(wxEVT_BUTTON, &QuotesPage::DeleteQuotes, this, wxID_DELETE);
     }
 
     Bind(wxEVT_GRID_CELL_CHANGED, &QuotesPage::GridCellChangedQuotes, this);
@@ -208,6 +208,47 @@ void QuotesPage::AddQuotes(wxCommandEvent& oEvent)
 
     //wxGridCellAttrPtr pCellAttr = m_pGrid->GetOrCreateCellAttrPtr(0, Quotes_Grid_SID_Col);
     //pCellAttr->SetReadOnly(false);
+}
+
+void QuotesPage::DeleteQuotes(wxCommandEvent& oEvent)
+{
+    wxString strMessage = "";
+    wxString strRows = "";
+    for (auto& nRow: m_pGrid->GetSelectedRows())
+    {
+        strRows.Append(
+            Concat({"\n", 
+                "(Row: ", StrOInt(nRow), ", "
+                "ID: ", GetCellValue(nRow, Quotes_Grid_ID_Col), "): ",
+                "Name: \"", GetCellValue(nRow, Quotes_Grid_Name_Col), "\""
+            })
+        );
+    }
+    if (strRows == "")
+    {
+        return;
+    }
+    if (wxMessageBox(Concat({"Following rows would be permanently deleted from the database. Are you sure?\n", strRows}),
+                    "Are you sure?",
+                    wxYES_NO|wxICON_INFORMATION) == wxYES)
+    {
+        for (auto& it : m_pGrid->GetSelectedRows())
+        {
+            if (GetRowStage(it) == Stage_New) {
+                DeleteRow(it);
+            }
+            else if ((GetRowStage(it) == Stage_Idle) || (GetRowStage(it) == Stage_Saved)) {
+                if (DBDelete(it, strMessage))
+                {
+                    DeleteRow(it);
+                }
+            }
+        }
+        if (strMessage != "") {
+            strMessage.Prepend("One or more entries could not be deleted:\n\n");
+            wxMessageBox(strMessage, "Error", Msg_Warn);
+        }
+    }
 }
 
 QuotesPage::~QuotesPage()

@@ -4,7 +4,7 @@
 # project specific logic here.
 #
 
-cmake_minimum_required(VERSION 3.8)
+cmake_minimum_required(VERSION 3.12)
 
 project(WindowQuotePro LANGUAGES CXX)
 
@@ -35,7 +35,7 @@ add_subdirectory(lib/application)
 add_executable(${PROJECT_NAME} WIN32 ${SRCS})
 
 if (CMAKE_VERSION VERSION_GREATER 3.12)
-  set_property(TARGET WindowQuotePro PROPERTY CXX_STANDARD 20)
+  set_property(TARGET ${PROJECT_NAME} PROPERTY CXX_STANDARD 20)
 endif()
 
 target_link_libraries(${PROJECT_NAME} PRIVATE 

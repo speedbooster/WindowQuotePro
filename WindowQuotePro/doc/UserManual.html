@@ -1,0 +1,67 @@
+<!-- BISMILLAAHIRRAHMAANIRRAHEEM -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>WindowQuotePro - User Manual</title>
+    <style>
+        body { font-family: Calibri }
+        h2 { color: #111111; }
+        h3 { color: #222222; }
+        h4 { color: #333333; }
+        h5 { color: #444444; }
+        p { color: #555555; }
+        .warning { color: #ff5555; font-weight: bold; }
+    </style>
+</head>
+<body>
+    <h1>BISMILLAAHIRRAHMAANIRRAHEEM</h1>
+    <h2>IN THE NAME OF ALLAAH, THE MOST BENEFICENT, THE MOST MERCIFUL</h2>
+    <h3>Introduction</h3>
+    <p>
+        <strong>WindowQuotePro</strong> is an application to generate quotes for Window panels
+    </p>
+    <h3>Requirements and dependencies</h3>
+    <p>
+        <strong>WindowQuotePro</strong> is based on <strong>SQLite</strong> database
+    </p>
+    <h3>Database Setup</h3>
+    <p>
+        <strong>WindowQuotePro</strong> is shipped with a ready to use blank database file <em>database.db</em><br />
+        However, if a reset to the database is desired, open <em>config.ini</em> and set <em>Debug</em> to <em>1</em>. Save <em>config.ini</em>.<br />
+        Now launch the <strong>WindowQuotePro</strong> and use the <em>Setup</em> and <em>Delete</em> controls at the top to reset the database file to a blank database. <span class=\"warning\">Warning: All data would be permanently lost.</span><br />
+        After a new database is setup, reset the <em>Debug</em> flag in <em>config.ini</em> to <em>0</em>.<br />
+    </p>
+    <h3>Usage</h3>
+    <h4>View/ Search quotes</h4>
+    <p>
+        Type and/ or select a search criteria in the search fields at the top of the application view in <strong>WindowQuotePro</strong> to fetch quote records from the database.<br />
+        Click <em>Reset</em> to reset the fields. Once the fields are reset, a search would return all the database records.<br />
+        Click <em>Search</em> to search the database for the field values.<br />
+        Click <em>Clear</em> to remove all records from the application view table. Records stored in the database are <strong>not</strong> affected.<br />
+    </p>
+    <h4>Add a new quote</h4>
+    <p>
+        To add a new quote, click the <em>Add</em> button at the top right corner of the application view. A new (highlighted) row is added in the table view.<br />
+        Enter the following information in the corresponding columns of the newly added row:<br />
+        <dl>
+            <dt><strong>Name:</strong></dt>
+            <dd>
+            <dd>Name of quote</dd>
+            <dt><strong>Customer:</strong></dt>
+            <dd>Customer name</dd>
+            <dt><strong>Material:</strong></dt>
+            <dd>Window panel material</dd>
+            <dt><strong>Size:</strong></dt>
+            <dd>Window panel size</strong></dd>
+        </dl>
+        Upon changing any of the <<em>Material</em> or <em>Size</em> properties, a new <strong>Price</strong> value is generated.<br />
+        Click <em>Save</em> to permanently store the quote record in the database.<br />
+    </p>
+    <h4>Delete a quote</h4>
+    <p>
+        To delete a quote permanently from the database, <em>Search</em> the quote to be visible in the table view.<br />
+        Click to select the quote to be marked for deletion.<br />
+        Click <em>Delete</em> in the top right corner of the application view to delete the selected quote from the database. <span class=\"warning\">Warning: This deletion is permanent.</span><br />
+    </p>
+</body>
+</html>

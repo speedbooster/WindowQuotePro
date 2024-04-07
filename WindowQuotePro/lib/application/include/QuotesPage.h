@@ -66,7 +66,7 @@ class QuotesPage : public Page
         void SearchQuotes(wxCommandEvent& oEvent);
         void AddQuotes(wxCommandEvent& oEvent);
         //void Save(wxCommandEvent& oEvent);
-        //void DeleteQuotes(wxCommandEvent& oEvent);
+        void DeleteQuotes(wxCommandEvent& oEvent);
         //void GenerateQuotes(wxCommandEvent& oEvent);
 
         //void RefreshRow(wxCommandEvent& oEvent);
