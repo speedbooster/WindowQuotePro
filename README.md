@@ -56,6 +56,16 @@ A copy of the said directory is available [here] (https://www.MuhammadBilalKhan.
 
 InShaaALLAAH, the application would run as expected.
 
+### Source files
+
+* *WindowQuoteProApp*: Application (wxWidgets)
+* *WindowQuoteProMain*: Main window frame (wxWidgets)
+* *DataStore*: Central class to store application data etc
+* *Page*: UI layout template helper class
+* *QuotesPage*: Quotes UI based on `Page`
+* *DialogAbout*: About dialog
+* *DialogHelp*: Help dialog
+
 ### Additional
 
 Source code is provided for the purpose of evaluation as per the shared document.
