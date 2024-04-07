@@ -53,3 +53,7 @@ A copy of the said directory is available [here] (https://www.MuhammadBilalKhan.
 * The application executable `WindowQuotePro` is built in subdirectory `out`.
 
 InShaaALLAAH, the application would run as expected.
+
+### Additional
+
+Source code is provided for the purpose of evaluation as per the shared document.
