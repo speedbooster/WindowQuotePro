@@ -1,11 +1,5 @@
 # BISMILLAAHIRRAHMAANIRRAHEEM - In The Name of ALLAAH, The Most Beneficent, The Most Merciful
 
-## Upwork Zoom Meeting
-
-April 17, 2024 : 12 PM EST, (9PM GMT+5)
-
-https://upwork-dash.zoom.us/j/97094584425?pwd=SnJockExUEltNjBzSjFsSDErQzdoZz09#success
-
 ## WindowQuotePro
 
 A Windows OS based CPQ application for generating quotes for window panes. [More information](https://www.MuhammadBilalKhan.com/work/WindowQuotePro)
