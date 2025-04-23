@@ -44,7 +44,7 @@ C:\
       |- wx
          |- ...
    |- lib
-      |- vc14x_x64_dll
+      |- vc14x_x64_dll (or, gcc_dll)
          |- ...
    |- lib
    |- wxwidgets.props

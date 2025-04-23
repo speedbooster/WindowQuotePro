@@ -16,13 +16,6 @@ set(CMAKE_CXX_STANDARD 11)
 set(wxWidgets_ROOT_DIR ${wxWidgets_path_base})
 # set(wxWidgets_CONFIGURATION msw)
 
-#--set(wxWidgets_CONFIGURATION msw)
-
-#set(wxWidgets_ROOT_DIR /f/wx) #${wxWidgets_path_base})
-# set(wxWidgets_LIB_DIR /f/wx/lib/gcc1220_x64_dll) #${wxWidgets_path_libs})
-#set(wxWidgets_CONFIGURATION mswu)
-#set(wxWidgets_EXCLUDE_COMMON_LIBRARIES TRUE)
-
 #export wxWidgets_ROOT_DIR=/f/wx
 #export wxWidgets_LIB_DIR=/f/wx/lib/gcc1220_x64_dll
 #export wxWidgets_CONFIGURATION=mswu

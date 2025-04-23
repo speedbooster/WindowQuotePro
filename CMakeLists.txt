@@ -13,16 +13,9 @@ project ("WindowQuotePro")
 
 # Define build parameters
 set(EnableTests ON)
-#set(wxWidgets_path_base "C:/wxWidgets")								# Path to wxWidgets `include` and `lib` directories
-#set(wxWidgets_path_libs ${wxWidgets_path_base}/lib/vc14x_x64_dll)	# Path to wxWidgets libraries inside the `lib` directory
 
-#set(wxWidgets_path_base "/c/wx/wxWidgets")								# Path to wxWidgets `include` and `lib` directories
-#set(wxWidgets_path_libs ${wxWidgets_path_base}/lib/gcc1320_x64_dll)	# Path to wxWidgets libraries inside the `lib` directory
-
-#set(wxWidgets_path_base "/j/wx324")								# Path to wxWidgets `include` and `lib` directories
 set(wxWidgets_path_base "/f/wx")								# Path to wxWidgets `include` and `lib` directories
-# set(wxWidgets_path_libs "/f/wx/lib/gcc1220_x64_dll")	# Path to wxWidgets libraries inside the `lib` directory
-set(wxWidgets_path_libs "/f/wx/lib/gcc_dll")	# Path to wxWidgets libraries inside the `lib` directory
+set(wxWidgets_path_libs "${wxWidgets_path_base}/lib/gcc_dll")	  # Path to wxWidgets libraries inside the `lib` directory
 
 set(Compiler_ID "gcc1220")
 if (MSVC)
