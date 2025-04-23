@@ -14,11 +14,26 @@ set(CMAKE_CXX_STANDARD 11)
 
 # wxWidgets
 set(wxWidgets_ROOT_DIR ${wxWidgets_path_base})
-set(wxWidgets_CONFIGURATION msw)
+# set(wxWidgets_CONFIGURATION msw)
+
+#--set(wxWidgets_CONFIGURATION msw)
+
+#set(wxWidgets_ROOT_DIR /f/wx) #${wxWidgets_path_base})
+# set(wxWidgets_LIB_DIR /f/wx/lib/gcc1220_x64_dll) #${wxWidgets_path_libs})
+#set(wxWidgets_CONFIGURATION mswu)
+#set(wxWidgets_EXCLUDE_COMMON_LIBRARIES TRUE)
+
+#export wxWidgets_ROOT_DIR=/f/wx
+#export wxWidgets_LIB_DIR=/f/wx/lib/gcc1220_x64_dll
+#export wxWidgets_CONFIGURATION=mswu
+#export wxWidgets_EXCLUDE_COMMON_LIBRARIES=TRUE
+
+message(STATUS ">>> ${wxWidgets_path_base}")
+
 find_package(wxWidgets REQUIRED core base)
 include(${wxWidgets_USE_FILE})
 
-set(SRCS 
+set(SRCS
 	WindowQuoteProApp.cpp
 	res/Resource.rc
 )
@@ -38,7 +53,7 @@ if (CMAKE_VERSION VERSION_GREATER 3.12)
   set_property(TARGET ${PROJECT_NAME} PROPERTY CXX_STANDARD 20)
 endif()
 
-target_link_libraries(${PROJECT_NAME} PRIVATE 
+target_link_libraries(${PROJECT_NAME} PRIVATE
 	${wxWidgets_LIBRARIES}
 	Application
 )
@@ -50,9 +65,9 @@ configure_file(res/splashscreen.png ${CMAKE_CURRENT_BINARY_DIR}/splashscreen.png
 configure_file(lib/application/res/config.ini ${CMAKE_CURRENT_BINARY_DIR}/config.ini COPYONLY)
 configure_file(lib/application/res/database.db ${CMAKE_CURRENT_BINARY_DIR}/database.db COPYONLY)
 
-configure_file(${wxWidgets_path_libs}/wxbase32u_vc14x_x64.dll ${CMAKE_CURRENT_BINARY_DIR}/wxbase32u_vc14x_x64.dll COPYONLY)
-configure_file(${wxWidgets_path_libs}/wxmsw32u_core_vc14x_x64.dll ${CMAKE_CURRENT_BINARY_DIR}/wxmsw32u_core_vc14x_x64.dll COPYONLY)
-configure_file(${wxWidgets_path_libs}/wxmsw32u_webview_vc14x_x64.dll ${CMAKE_CURRENT_BINARY_DIR}/wxmsw32u_webview_vc14x_x64.dll COPYONLY)
+configure_file(${wxWidgets_path_libs}/wxbase32u_${Compiler_ID}_x64.dll ${CMAKE_CURRENT_BINARY_DIR}/wxbase32u_${Compiler_ID}_x64.dll COPYONLY)
+configure_file(${wxWidgets_path_libs}/wxmsw32u_core_${Compiler_ID}_x64.dll ${CMAKE_CURRENT_BINARY_DIR}/wxmsw32u_core_${Compiler_ID}_x64.dll COPYONLY)
+configure_file(${wxWidgets_path_libs}/wxmsw32u_webview_${Compiler_ID}_x64.dll ${CMAKE_CURRENT_BINARY_DIR}/wxmsw32u_webview_${Compiler_ID}_x64.dll COPYONLY)
 
 file(COPY doc/README.txt DESTINATION ${CMAKE_CURRENT_BINARY_DIR})
 file(COPY doc/UserManual.html DESTINATION ${CMAKE_CURRENT_BINARY_DIR})
@@ -65,9 +80,9 @@ install(FILES ${CMAKE_CURRENT_BINARY_DIR}/splashscreen.png DESTINATION ${CMAKE_I
 install(FILES ${CMAKE_CURRENT_BINARY_DIR}/config.ini DESTINATION ${CMAKE_INSTALL_BINDIR})
 install(FILES ${CMAKE_CURRENT_BINARY_DIR}/database.db DESTINATION ${CMAKE_INSTALL_BINDIR})
 
-install(FILES ${CMAKE_CURRENT_BINARY_DIR}/wxbase32u_vc14x_x64.dll DESTINATION ${CMAKE_INSTALL_BINDIR})
-install(FILES ${CMAKE_CURRENT_BINARY_DIR}/wxmsw32u_core_vc14x_x64.dll DESTINATION ${CMAKE_INSTALL_BINDIR})
-install(FILES ${CMAKE_CURRENT_BINARY_DIR}/wxmsw32u_webview_vc14x_x64.dll DESTINATION ${CMAKE_INSTALL_BINDIR})
+install(FILES ${CMAKE_CURRENT_BINARY_DIR}/wxbase32u_${Compiler_ID}_x64.dll DESTINATION ${CMAKE_INSTALL_BINDIR})
+install(FILES ${CMAKE_CURRENT_BINARY_DIR}/wxmsw32u_core_${Compiler_ID}_x64.dll DESTINATION ${CMAKE_INSTALL_BINDIR})
+install(FILES ${CMAKE_CURRENT_BINARY_DIR}/wxmsw32u_webview_${Compiler_ID}_x64.dll DESTINATION ${CMAKE_INSTALL_BINDIR})
 
 install(FILES ${CMAKE_CURRENT_BINARY_DIR}/README.txt TYPE DOC)
 install(FILES ${CMAKE_CURRENT_BINARY_DIR}/UserManual.html TYPE DOC)

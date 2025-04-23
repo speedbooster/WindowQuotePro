@@ -7,3 +7,4 @@ wx/
 */*.cbp
 */*.depend
 */*.layout
+build
